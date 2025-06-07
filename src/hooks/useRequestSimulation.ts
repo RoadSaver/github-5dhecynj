@@ -151,8 +151,8 @@ export const useRequestSimulation = () => {
   }, [user]);
 
   const addEmployeeToBlacklist = useCallback(async (requestId: string, employeeName: string) => {
-    if (!user || !employeeName || employeeName === 'Unknown') {
-      console.log('Cannot blacklist: missing user, employee name, or employee name is Unknown');
+    if (!user || typeof user.username !== 'string' || !employeeName || employeeName === 'Unknown') {
+      console.log('Cannot blacklist: missing user, invalid username, missing employee name, or employee name is Unknown');
       return false;
     }
     
