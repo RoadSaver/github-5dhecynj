@@ -4,6 +4,7 @@ import { toast } from "@/components/ui/use-toast";
 import { UserHistoryService } from '@/services/userHistoryService';
 import { useApp } from '@/contexts/AppContext';
 import { useMemo, useCallback } from 'react';
+import { SimulatedEmployeeBlacklistService } from '@/services/simulatedEmployeeBlacklistService';
 
 export const useRequestSimulation = () => {
   const { loadEmployees, getRandomEmployee } = useEmployeeSimulation();
@@ -126,8 +127,22 @@ export const useRequestSimulation = () => {
     }, (etaSeconds + 10) * 1000);
   }, [user]);
 
+  const addEmployeeToBlacklist = useCallback(async (
+    requestId: string,
+    employeeName: string,
+    userId: string
+  ) => {
+    try {
+      await SimulatedEmployeeBlacklistService.addToBlacklist(requestId, employeeName, userId);
+    } catch (error) {
+      console.error('Error adding employee to blacklist:', error);
+      throw error;
+    }
+  }, []);
+
   return useMemo(() => ({
     simulateEmployeeResponse,
-    handleAccept
-  }), [simulateEmployeeResponse, handleAccept]);
+    handleAccept,
+    addEmployeeToBlacklist
+  }), [simulateEmployeeResponse, handleAccept, addEmployeeToBlacklist]);
 };
