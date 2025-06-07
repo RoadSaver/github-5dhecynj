@@ -308,7 +308,11 @@ export const useServiceRequest = (
       console.log('Second decline - blacklisting employee:', assignedEmployee);
       
       // Add employee to blacklist
-      await addEmployeeToBlacklist(ongoingRequest.id, assignedEmployee);
+      try {
+        await addEmployeeToBlacklist(ongoingRequest.id, assignedEmployee);
+      } catch (error) {
+        console.error('Error adding employee to blacklist:', error);
+      }
       
       // Record decline in history
       try {
